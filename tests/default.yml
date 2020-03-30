@@ -1,0 +1,33 @@
+---
+
+- hosts: psm
+  gather_facts: no
+  tasks:
+
+    - name: Get roles directory dirname
+      set_fact:
+        roles_dirname: "{{ playbook_dir | dirname | basename }}"
+
+    - name: download package from s3
+      aws_s3:
+        bucket: cloud-initiatives-pipeline-bucket
+        object: "Packages/v11.3/Privileged Session Manager-Rls-v11.3.zip"
+        dest: "/tmp/psmp.zip"
+        mode: get
+      delegate_to: localhost
+
+    - name: PSMP Deployment
+      include_role:
+        name: "{{ roles_dirname }}"
+      vars:
+        - psmp_extract: true
+        - psmp_official: false
+        - psmp_prerequisites: true
+        - psmp_install: true
+        - psmp_postinstall: true
+        - psmp_hardening: false
+        - psmp_registration: false
+        - psmp_zip_file_path: "/tmp/psmp.zip"
+        - accept_eula: "yes"
+        - connect_with_rdp: "yes"
+        - psmp_out_of_domain: true

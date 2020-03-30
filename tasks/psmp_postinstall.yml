@@ -1,0 +1,25 @@
+---
+# tasks file for psmp installation
+
+- name: Create folder
+  file:
+    path: "/home/proxymng/.ssh"
+    state: directory
+    mode: '0700'
+    owner: proxymng
+
+- name: Copy psmp user SSH Public key to proxymng
+  copy:
+    src: "/home/{{ ansible_user }}/.ssh/authorized_keys"
+    dest: /home/proxymng/.ssh/authorized_keys
+    remote_src: yes
+    owner: proxymng
+
+- name: Make proxymng sudoer
+  lineinfile:
+    path: "/etc/sudoers.d/proxymng"
+    state: present
+    line: 'proxymng ALL=(ALL) NOPASSWD: ALL'
+    mode: 0440
+    create: yes
+    validate: /usr/sbin/visudo -cf %s

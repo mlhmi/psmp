@@ -1,0 +1,30 @@
+---
+# tasks file for psm
+
+# Validate Parameters
+- name: Validate input parameters
+  include_tasks: psmp_validateparameters.yml
+
+- name: Extract PSMP package
+  include_tasks: psmp_extract.yml
+  when:
+    - psmp_extract
+  tags: [print_action]
+
+- name: Running PSMP prerequisities
+  include_tasks: psmp_prerequisites.yml
+  when:
+    - psmp_prerequisites
+  tags: [print_action]
+
+- name: Running PSMP install
+  include_tasks: psmp_install.yml
+  when:
+    - psmp_install
+  tags: [print_action]
+
+- name: Running PSMP post install
+  include_tasks: psmp_postinstall.yml
+  when:
+    - psmp_postinstall
+  tags: [print_action]

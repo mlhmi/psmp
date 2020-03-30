@@ -1,0 +1,23 @@
+---
+# tasks file for psmp installation
+
+- name: Installation Block
+  block:
+    - name: Install PSMP rpm file
+      shell: "rpm -i CARKpsmp-11.2.0-22.x86_64.rpm"
+      args:
+        chdir: "{{ psmp_extract_folder }}/{{ psmp_component_folder }}"
+    # yum:
+      # name: "CARKpsmp-11.2.0-22.x86_64.rpm"
+        # installroot: "{{ psmp_extract_folder }}/{{ psmp_component_folder }}"
+        # state: present
+
+- name: Check PSMP service status
+  stat:
+    path: "/etc/init.d/psmpsrv"
+  register: psmp_service_info
+
+- name: Set psmp exists
+  set_fact:
+    psmp_exists: true
+  when: psmp_service_info.stat.exists

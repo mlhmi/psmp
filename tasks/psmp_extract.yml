@@ -1,0 +1,37 @@
+---
+# tasks file for psmp_extract
+
+- name: Create folder
+  file:
+    path: "{{ psmp_extract_folder }}"
+    state: directory
+    mode: '0755'
+
+#- name: Copy PSMP package from local source
+#  copy:
+#    src: "{{ psmp_zip_file_path }}"
+#    dest: "{{ psmp_extract_folder }}/{{ psmp_artifact_name }}"
+#  register: st
+
+#- name: Validate copy success
+#  fail:
+#    msg: "{{ psmp_zip_file_path }} not exists, failing..."
+#  when: not st.checksum
+
+#- name: Check if package is valid using checksum
+#  fail:
+#    msg: "Checksum does not match, please validate your package."
+#  when:
+#    - st.checksum != psmp_sha1_checksum
+#    - not psmp_ignore_checksum
+
+- name: Create component folder
+  file:
+    path: "{{ psmp_extract_folder }}/{{ psmp_component_folder }}"
+    state: directory
+    mode: '0755'
+
+- name: Unzip the PSMP package
+  unarchive:
+    src: "{{ psmp_zip_file_path }}"
+    dest: "{{ psmp_extract_folder }}/{{ psmp_component_folder }}"

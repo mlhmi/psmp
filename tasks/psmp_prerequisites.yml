@@ -1,0 +1,57 @@
+---
+# tasks file for psmp prerequisities
+
+- name: Preinstall block
+  block:
+    - name: Create management user
+      user:
+        name: proxymng
+        group: root
+
+    - name: Add Cyberark GPG key
+      rpm_key:
+        state: present
+        key: "{{ psmp_extract_folder }}/{{ psmp_component_folder }}/RPM-GPG-KEY-CyberArk"
+
+    - name: Change vault.ini configurations
+      lineinfile:
+        path: "{{ psmp_extract_folder }}/{{ psmp_component_folder }}/vault.ini"
+        regexp: "^ADDRESS="
+        line: "ADDRESS={{ vault_ip }}"
+
+    - name: Add Execution permissions to CreateCredFile
+      file:
+        path: "{{ psmp_extract_folder }}/{{ psmp_component_folder }}/CreateCredFile"
+        mode: "0755"
+
+    - name: Create CredFile
+      command: "{{ psmp_extract_folder }}/{{ psmp_component_folder }}/CreateCredFile {{ psmp_extract_folder }}/{{ psmp_component_folder }}/user.cred Password -username {{ vault_username }} -password {{ vault_password }}"
+
+    - name: Copy psmp params file
+      copy:
+        src: "{{ psmp_extract_folder }}/{{ psmp_component_folder }}/psmpparms.sample"
+        dest: /var/tmp/psmpparms
+        remote_src: yes
+
+    - name: Edit psmp params file
+      block:
+        - name: Change installation folder
+          lineinfile:
+            path: "/var/tmp/psmpparms"
+            regexp: "^InstallationFolder="
+            line: "InstallationFolder={{ psmp_extract_folder }}/{{ psmp_component_folder }}"
+        - name: Accept cyberark EULA
+          lineinfile:
+            path: "/var/tmp/psmpparms"
+            regexp: "^AcceptCyberArkEULA="
+            line: "AcceptCyberArkEULA=Yes"
+        - name: Change PSMPAppUser
+          lineinfile:
+            path: "/var/tmp/psmpparms"
+            regexp: "^#PSMPAppUser="
+            line: "PSMPAppUser=PSMPApp_{{ ansible_hostname }}"
+        - name: Change PSMPGWAppUser
+          lineinfile:
+            path: "/var/tmp/psmpparms"
+            regexp: "^#PSMPGWUser="
+            line: "PSMPGWUser=PSMPGW_{{ ansible_hostname }}"

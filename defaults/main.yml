@@ -1,0 +1,24 @@
+---
+# defaults file for psmp
+psmp_prerequisites: false
+psmp_install: false
+psmp_hardening: false
+psmp_registration: false
+psmp_postinstall: false
+psmp_extract: false
+psmp_ignore_checksum: false
+psmp_official: true
+psmp_exists: false
+psmp_hardened: false
+psmp_registered: false
+
+psmp_extract_folder: "/opt/cyberark/packages"
+psmp_artifact_name: "psmp.zip"
+psmp_component_folder: "Privileged-Session-Manager-SSH-Proxy"
+
+psmp_restart: true
+
+accept_eula: "No"
+
+vault_username: "Administrator"
+vault_port: 1858
