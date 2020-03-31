@@ -13,11 +13,20 @@
         state: present
         key: "{{ psmp_extract_folder }}/{{ psmp_component_folder }}/RPM-GPG-KEY-CyberArk"
 
+    - name: Set Vault ip in vault_ips array
+      set_fact:
+        vault_ips: "{{ vault_ip }}"
+
+    - name: Concat DR Vault to vault_ips array
+      setfact:
+        vault_ips: "{{ vault_ips }},{{ dr_vault_ip }}"
+      when: dr_vault_ip is defined
+
     - name: Change vault.ini configurations
       lineinfile:
         path: "{{ psmp_extract_folder }}/{{ psmp_component_folder }}/vault.ini"
         regexp: "^ADDRESS="
-        line: "ADDRESS={{ vault_ip }}"
+        line: "ADDRESS={{ vault_ips }}"
 
     - name: Add Execution permissions to CreateCredFile
       file:
