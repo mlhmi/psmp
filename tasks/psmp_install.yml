@@ -4,7 +4,7 @@
 - name: Installation Block
   block:
     - name: Install PSMP rpm file
-      shell: "rpm -i CARKpsmp-11.2.0-22.x86_64.rpm"
+      shell: "rpm -i {{ psmp_installation_file }}"
       args:
         chdir: "{{ psmp_extract_folder }}/{{ psmp_component_folder }}"
     # yum:

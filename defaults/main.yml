@@ -15,6 +15,7 @@ psmp_registered: false
 psmp_extract_folder: "/opt/cyberark/packages"
 psmp_artifact_name: "psmp.zip"
 psmp_component_folder: "Privileged-Session-Manager-SSH-Proxy"
+psmp_installation_file: "CARKpsmp-11.04.0.22.x86_64.rpm"
 
 psmp_restart: true
 
