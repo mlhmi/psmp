@@ -42,12 +42,8 @@
       lineinfile:
         path: "/etc/ssh/sshd_config"
         regexp: "^AllowTcpForwarding no"
-        line: "AllowTcpForwarding yes"
-    - name: Permit Tunnel
-      lineinfile:
-        path: "/etc/ssh/sshd_config"
-        regexp: "^PermitTunnel no"
-        line: "PermitTunnel yes"
+        line: "AllowTcpForwarding local"
+
     - name: Enable Forwarding
       lineinfile:
         path: "/etc/ssh/sshd_config"
