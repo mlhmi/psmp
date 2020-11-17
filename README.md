@@ -2,30 +2,30 @@
 This Ansible Role will deploy and install CyberArk Privileged Session Manager including the pre-requisites, application, hardening and connect to an existing Vault environment.
 
 ## Requirements
-------------
-
-- Windows 2016 installed on the remote host
-- WinRM open on port 5986 (**not 5985**) on the remote host
+- Remote host operating system 
+   - Red Hat Enterprise Linux 6.x versions (6.4 and above) and 7.x versions,
+   - CentOS Linux 6.x versions (6.4 and above) and 7.x versions, 
+   - Or SUSE Linux Enterprise Server 11 SP4, 12, 12 SP1, 12 SP2 versions.
+- SSH open on port TCP/22 on the remote host
 - Pywinrm is installed on the workstation running the playbook
 - The workstation running the playbook must have network connectivity to the remote host
 - The remote host must have Network connectivity to the CyberArk vault and the repository server
-  - 443 port outbound
-  - 1858 port outbound
-- Administrator access to the remote host
+  - 1858 port outbound to trhe vault server
+- Account with root permissions access to the remote host
 - PSMP CD image
 
 
 ### Flow Variables
 Variable                         | Required     | Default                                   | Comments
 :--------------------------------|:-------------|:------------------------------------------|:---------
-psmp_prerequisites                | no           | false                                     | Install PSMP pre requisites
-psmp_install                      | no           | false                                     | Install PSM
-psmp_postinstall                  | no           | false                                     | PSMP post install role
-psmp_hardening                    | no           | false                                     | Apply PSMP hardening
-psmp_registration                 | no           | false                                     | Connect PSMP to the Vault
-psmp_upgrade                      | no           | false                                     | N/A
-psmp_clean                        | no           | false                                     | N/A
-psmp_uninstall                    | no           | false                                     | N/A
+psmp_prerequisites               | no           | false                                     | Install PSMP pre requisites
+psmp_install                     | no           | false                                     | Install PSM
+psmp_postinstall                 | no           | false                                     | PSMP post install role
+psmp_hardening                   | no           | false                                     | Apply PSMP hardening
+psmp_registration                | no           | false                                     | Connect PSMP to the Vault
+psmp_upgrade                     | no           | false                                     | N/A
+psmp_clean                       | no           | false                                     | N/A
+psmp_uninstall                   | no           | false                                     | N/A
 
 ### Deployment Variables
 Variable                         | Required     | Default                                              | Comments
@@ -37,10 +37,7 @@ vault_password                   | yes          | None                          
 secure_vault_password            | no           | None                                                 | Secure Vault password to perform registration
 dr_vault_ip                      | no           | None                                                 | Vault DR IP address to perform registration
 accept_eula                      | yes          | **No**                                               | Accepting EULA condition (Yes/No)
-psmp_zip_file_path                | yes          | None                                                 | CyberArk PSMP installation Zip file package path
-connect_with_rdp                 | yes          | **No**                                               | Disable NLA on the server
-psmp_installation_drive           | no           | **C:**                                               | Destination installation drive
-psmp_out_of_domain                | no           | false                                                | Flag to determine if server is out of domain
+psmp_zip_file_path               | yes          | None                                                 | CyberArk PSMP installation Zip file package path
 
 ## Dependencies
 None
@@ -86,7 +83,7 @@ to call the PSMP role with several parameters:
 ```
 ---
 - include_role:
-    name: psm
+    name: psmp
   vars:
     - psmp_prerequisites: true
     - psmp_install: true
