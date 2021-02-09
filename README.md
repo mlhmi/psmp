@@ -5,11 +5,10 @@ This Ansible Role will deploy and install CyberArk Privileged Session Manager in
 ------------
 
 - Windows 2016 installed on the remote host
-- WinRM open on port 5986 (**not 5985**) on the remote host
+- SSH open on port 22 on the remote host
 - Pywinrm is installed on the workstation running the playbook
 - The workstation running the playbook must have network connectivity to the remote host
 - The remote host must have Network connectivity to the CyberArk vault and the repository server
-  - 443 port outbound
   - 1858 port outbound
 - Administrator access to the remote host
 - PSMP CD image
